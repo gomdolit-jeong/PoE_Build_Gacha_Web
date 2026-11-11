@@ -18,6 +18,9 @@ public sealed record PoeClass(
 /// PoE1 직업·전직·주요 스킬 젬 목록.
 /// 일반 전직은 3.30 (Covens of Umbra) 기준, 프레시아 전직은 Legacy of Phrecia 이벤트의 19종입니다.
 /// 한글 이름은 한국 클라이언트 표기(poedb.tw/kr)를 따릅니다.
+/// 리그에서 더 이상 얻을 수 없는 젬은 넣지 않습니다 (스탠다드에만 남은 젬 포함).
+/// 공식 패치 노트 3.8.0~3.30.0 기준으로 확인했고, 3.25.0에서 삭제된 선대의 대전사(Ancestral Warchief)를 뺐습니다.
+/// https://www.pathofexile.com/forum/view-forum/patch-notes
 /// </summary>
 public static class PoeData
 {
@@ -34,8 +37,7 @@ public static class PoeData
             [A("Boneshatter", "뼈 박살"), A("Earthquake", "지진"), A("Sunder", "산산조각"),
              A("Ground Slam", "대지 강타"), A("Molten Strike", "용암 타격"), A("Earthshatter", "지면 분쇄"),
              A("Shield Crush", "방패 타쇄"), A("Infernal Blow", "지옥불 맹타"), A("Rage Vortex", "격노 소용돌이"),
-             A("Volcanic Fissure", "화산 균열"), S("Holy Flame Totem", "신성한 화염 토템"),
-             A("Ancestral Warchief", "선대의 대전사")]),
+             A("Volcanic Fissure", "화산 균열"), S("Holy Flame Totem", "신성한 화염 토템")]),
 
         new("Duelist", "듀얼리스트", "#d35400",
             [Asc("Slayer", "슬레이어"), Asc("Gladiator", "글래디에이터"), Asc("Champion", "챔피언")],
