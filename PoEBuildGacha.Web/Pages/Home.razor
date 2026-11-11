@@ -71,12 +71,11 @@
                     </div>
                     <div class="card wide">
                         <dt>주요 스킬</dt>
-                        <dd>@result.Skill.Name</dd>
-                        <small>@PoeData.KindLabel(result.Skill.Kind) 젬</small>
+                        <dd>@result.Skill.Korean</dd>
+                        <small>@result.Skill.Name · @PoeData.KindLabel(result.Skill.Kind) 젬</small>
                     </div>
                 </dl>
 
-                <p class="fate">운명 코드 <code>@result.FateCode</code></p>
                 <p class="hint">같은 닉네임은 언제 뽑아도 같은 결과가 나와요. 마음에 안 들면… 닉네임을 바꾸세요.</p>
             </section>
         }

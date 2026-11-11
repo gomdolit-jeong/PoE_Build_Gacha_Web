@@ -218,8 +218,6 @@ html, body {
 .card dd { margin: 4px 0 2px; font-size: 1.3rem; font-weight: 700; }
 .card small { color: var(--muted); }
 
-.fate { margin: 16px 0 4px; color: var(--muted); font-size: .85rem; }
-.fate code { color: var(--gold); letter-spacing: .05em; }
-.hint { margin: 0; color: var(--muted); font-size: .85rem; }
+.hint { margin: 16px 0 0; color: var(--muted); font-size: .85rem; }
 
 .footer { text-align: center; color: #5e5446; font-size: .75rem; margin-top: 32px; }

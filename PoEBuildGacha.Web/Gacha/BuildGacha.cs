@@ -5,7 +5,6 @@ namespace PoEBuildGacha.Web.Gacha;
 public sealed record GachaResult(
     string Nickname,
     bool Phrecia,
-    string FateCode,
     PoeClass Class,
     Ascendancy Ascendancy,
     Skill Skill);
@@ -30,8 +29,7 @@ public static class BuildGacha
         var ascendancy = Pick(ascPool, Hash($"{key}|ascendancy|{league}"));
         var skill = Pick(poeClass.Skills, Hash($"{key}|skill|{league}"));
 
-        var fateCode = Hash($"{key}|{league}").ToString("X16");
-        return new GachaResult(nickname.Trim(), phrecia, fateCode, poeClass, ascendancy, skill);
+        return new GachaResult(nickname.Trim(), phrecia, poeClass, ascendancy, skill);
     }
 
     static T Pick<T>(T[] items, ulong hash) => items[(int)(hash % (ulong)items.Length)];
