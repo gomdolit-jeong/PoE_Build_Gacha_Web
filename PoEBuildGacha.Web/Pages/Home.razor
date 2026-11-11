@@ -42,12 +42,22 @@
                     <span>프레시아 리그 (프레시아 전직 + 이동기 추천)</span>
                 </label>
 
-                <div class="dice-stage">
-                    <div class="dice @(rolling ? "rolling" : landed ? "landed" : "")">
-                        @for (var cell = 1; cell <= 9; cell++)
-                        {
-                            <span class="pip @(Pips[diceFace].Contains(cell) ? "on" : "")"></span>
-                        }
+                <div class="dice-stage @(rolling ? "rolling" : landed ? "landed" : "")">
+                    <div class="dice-shadow"></div>
+                    <div class="dice-bounce">
+                        <div class="dice-tilt">
+                            <div class="cube" style="transform: rotateX(@(rotX)deg) rotateY(@(rotY)deg)">
+                                @for (var face = 1; face <= 6; face++)
+                                {
+                                    <div class="face face-@face">
+                                        @for (var cell = 1; cell <= 9; cell++)
+                                        {
+                                            <span class="pip @(Pips[face].Contains(cell) ? "on" : "")"></span>
+                                        }
+                                    </div>
+                                }
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -116,6 +126,17 @@
         [6] = [1, 3, 4, 6, 7, 9],
     };
 
+    // 각 눈이 정면에 오도록 하는 회전 각도 (X, Y)
+    static readonly Dictionary<int, (int X, int Y)> FaceAngles = new()
+    {
+        [1] = (0, 0),
+        [6] = (0, 180),
+        [3] = (0, -90),
+        [4] = (0, 90),
+        [2] = (-90, 0),
+        [5] = (90, 0),
+    };
+
     readonly Random rng = new();
 
     int? game;
@@ -123,7 +144,11 @@
     bool rolling;
     bool landed;
     bool flash;
-    int diceFace = 6;
+    // 지금까지 돈 바퀴 수 (항상 앞으로만 굴러가도록 계속 쌓습니다)
+    int spinX;
+    int spinY;
+    int rotX;
+    int rotY;
     GachaResult? result;
 
     async Task Roll()
@@ -134,15 +159,16 @@
         landed = false;
         result = null;
 
-        // 주사위가 구르는 동안 눈이 빠르게 바뀌다가 점점 느려집니다.
-        for (var i = 0; i < 14; i++)
-        {
-            diceFace = rng.Next(1, 7);
-            StateHasChanged();
-            await Task.Delay(60 + i * 12);
-        }
+        // 나올 눈을 먼저 정하고, 여러 바퀴 돈 뒤 그 눈이 정면에서 멈추게 합니다.
+        var face = rng.Next(1, 7);
+        spinX += 360 * rng.Next(2, 4);
+        spinY += 360 * rng.Next(2, 4);
+        rotX = spinX + FaceAngles[face].X;
+        rotY = spinY + FaceAngles[face].Y;
+        StateHasChanged();
 
-        diceFace = rng.Next(1, 7);
+        await Task.Delay(1600);
+
         result = BuildGacha.Roll(phrecia, rng);
         rolling = false;
         landed = true;
