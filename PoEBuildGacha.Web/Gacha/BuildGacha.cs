@@ -7,7 +7,8 @@ public sealed record GachaResult(
     bool Phrecia,
     PoeClass Class,
     Ascendancy Ascendancy,
-    Skill Skill);
+    Skill Skill,
+    Skill? Movement);
 
 /// <summary>
 /// 닉네임을 해시해서 직업·전직·주요 스킬을 고릅니다.
@@ -28,8 +29,10 @@ public static class BuildGacha
         var ascPool = phrecia ? poeClass.PhreciaAscendancies : poeClass.Ascendancies;
         var ascendancy = Pick(ascPool, Hash($"{key}|ascendancy|{league}"));
         var skill = Pick(poeClass.Skills, Hash($"{key}|skill|{league}"));
+        // 이동기는 프레시아 리그에서만 추천합니다.
+        var movement = phrecia ? Pick(PoeData.MovementSkills(poeClass), Hash($"{key}|movement")) : null;
 
-        return new GachaResult(nickname.Trim(), phrecia, poeClass, ascendancy, skill);
+        return new GachaResult(nickname.Trim(), phrecia, poeClass, ascendancy, skill, movement);
     }
 
     static T Pick<T>(T[] items, ulong hash) => items[(int)(hash % (ulong)items.Length)];

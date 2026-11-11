@@ -88,6 +88,32 @@ public static class PoeData
              S("Blade Vortex", "칼날 소용돌이")]),
     ];
 
+    // 이동기 (프레시아 리그에서만 추천). 직업 무기에 맞춰 고릅니다.
+    static readonly Skill LeapSlam = A("Leap Slam", "도약 강타");
+    static readonly Skill Dash = S("Dash", "질주");
+    static readonly Skill FlameDash = S("Flame Dash", "화염 질주");
+    static readonly Skill Frostblink = S("Frostblink", "서리점멸");
+    static readonly Skill WhirlingBlades = A("Whirling Blades", "칼날 선회");
+    static readonly Skill ShieldCharge = A("Shield Charge", "방패 돌진");
+    static readonly Skill LightningWarp = S("Lightning Warp", "번개 차원 이동");
+    static readonly Skill BlinkArrow = A("Blink Arrow", "점멸 화살");
+    static readonly Skill SmokeMine = S("Smoke Mine", "연막 지뢰");
+    static readonly Skill Bodyswap = S("Bodyswap", "신체 전환");
+    static readonly Skill WitheringStep = S("Withering Step", "고사시키는 걸음");
+
+    static readonly Dictionary<string, Skill[]> MovementByClass = new()
+    {
+        ["Marauder"] = [LeapSlam, ShieldCharge, Dash, FlameDash, Frostblink],
+        ["Duelist"] = [WhirlingBlades, LeapSlam, ShieldCharge, Dash, Frostblink],
+        ["Ranger"] = [BlinkArrow, WhirlingBlades, Dash, FlameDash, Frostblink],
+        ["Shadow"] = [WhirlingBlades, SmokeMine, WitheringStep, Dash, FlameDash, Frostblink],
+        ["Witch"] = [FlameDash, Frostblink, Bodyswap, LightningWarp, Dash],
+        ["Templar"] = [FlameDash, Frostblink, LightningWarp, LeapSlam, Dash],
+        ["Scion"] = [Dash, FlameDash, Frostblink, WhirlingBlades, LeapSlam, BlinkArrow],
+    };
+
+    public static Skill[] MovementSkills(PoeClass poeClass) => MovementByClass[poeClass.Name];
+
     public static string KindLabel(SkillKind kind) => kind switch
     {
         SkillKind.Attack => "공격",

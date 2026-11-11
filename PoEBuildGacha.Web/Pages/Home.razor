@@ -38,7 +38,7 @@
 
                 <label class="check">
                     <input type="checkbox" @bind="phrecia" />
-                    <span>프레시아 리그 (Legacy of Phrecia 전직으로 뽑기)</span>
+                    <span>프레시아 리그 (프레시아 전직 + 이동기 추천)</span>
                 </label>
 
                 <button type="submit" class="roll" disabled="@string.IsNullOrWhiteSpace(nickname)">
@@ -74,6 +74,14 @@
                         <dd>@result.Skill.Korean</dd>
                         <small>@result.Skill.Name · @PoeData.KindLabel(result.Skill.Kind) 젬</small>
                     </div>
+                    @if (result.Movement is not null)
+                    {
+                        <div class="card wide">
+                            <dt>이동기</dt>
+                            <dd>@result.Movement.Korean</dd>
+                            <small>@result.Movement.Name</small>
+                        </div>
+                    }
                 </dl>
 
                 <p class="hint">같은 닉네임은 언제 뽑아도 같은 결과가 나와요. 마음에 안 들면… 닉네임을 바꾸세요.</p>
