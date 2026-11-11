@@ -16,7 +16,7 @@ public sealed record PoeClass(
 
 /// <summary>
 /// PoE1 직업·전직·주요 스킬 젬 목록.
-/// 일반 전직은 3.28 기준, 프레시아 전직은 Legacy of Phrecia 이벤트의 19종입니다.
+/// 일반 전직은 3.30 (Covens of Umbra) 기준, 프레시아 전직은 Legacy of Phrecia 이벤트의 19종입니다.
 /// 한글 이름은 한국 클라이언트 표기(poedb.tw/kr)를 따릅니다.
 /// </summary>
 public static class PoeData
@@ -79,7 +79,7 @@ public static class PoeData
              S("Holy Flame Totem", "신성한 화염 토템"), A("Smite", "징벌"), S("Arc", "연쇄 번개")]),
 
         new("Scion", "사이온", "#7f8c8d",
-            [Asc("Ascendant", "어센던트"), Asc("Reliquarian", "렐리쿼리언")],
+            [Asc("Ascendant", "어센던트"), Asc("Reliquarian", "렐리쿼리언"), Asc("Luminary", "루미너리")],
             [Asc("Scavenger", "스캐빈저")],
             [A("Cyclone", "회오리바람"), A("Lightning Arrow", "번개 화살"), S("Arc", "연쇄 번개"),
              S("Righteous Fire", "정의의 화염"), A("Boneshatter", "뼈 박살"),
