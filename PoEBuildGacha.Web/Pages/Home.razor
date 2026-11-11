@@ -1,0 +1,107 @@
+﻿@page "/"
+@using PoEBuildGacha.Web.Gacha
+
+<PageTitle>PoE Build Gacha</PageTitle>
+
+<main class="shell">
+    <header class="hero">
+        <h1>PoE Build Gacha</h1>
+        <p class="tagline">닉네임에 새겨진 운명이 이번 리그 빌드를 정해 드립니다</p>
+    </header>
+
+    @if (game is null)
+    {
+        <section class="panel">
+            <h2>어떤 게임을 하시나요?</h2>
+            <div class="game-grid">
+                <button class="game-card" @onclick="() => game = 1">
+                    <span class="game-title">Path of Exile 1</span>
+                    <span class="game-sub">빌드 뽑으러 가기</span>
+                </button>
+                <button class="game-card disabled" disabled>
+                    <span class="game-title">Path of Exile 2</span>
+                    <span class="badge">개발 예정</span>
+                </button>
+            </div>
+        </section>
+    }
+    else
+    {
+        <section class="panel">
+            <button class="back" @onclick="Reset">← 게임 다시 고르기</button>
+            <h2>Path of Exile 1</h2>
+
+            <form class="roll-form" @onsubmit="Roll" @onsubmit:preventDefault>
+                <label for="nickname">닉네임</label>
+                <input id="nickname" @bind="nickname" @bind:event="oninput"
+                       maxlength="30" placeholder="캐릭터 이름이나 닉네임" autocomplete="off" />
+
+                <label class="check">
+                    <input type="checkbox" @bind="phrecia" />
+                    <span>프레시아 리그 (Legacy of Phrecia 전직으로 뽑기)</span>
+                </label>
+
+                <button type="submit" class="roll" disabled="@string.IsNullOrWhiteSpace(nickname)">
+                    운명 뽑기
+                </button>
+            </form>
+        </section>
+
+        @if (result is not null)
+        {
+            <section class="result" style="--class-color: @result.Class.Color">
+                <div class="result-head">
+                    <span class="who">@result.Nickname</span>님의 운명
+                    @if (result.Phrecia)
+                    {
+                        <span class="badge phrecia">프레시아</span>
+                    }
+                </div>
+
+                <dl class="cards">
+                    <div class="card">
+                        <dt>직업</dt>
+                        <dd>@result.Class.Korean</dd>
+                        <small>@result.Class.Name</small>
+                    </div>
+                    <div class="card">
+                        <dt>전직</dt>
+                        <dd>@result.Ascendancy.Korean</dd>
+                        <small>@result.Ascendancy.Name</small>
+                    </div>
+                    <div class="card wide">
+                        <dt>주요 스킬</dt>
+                        <dd>@result.Skill.Name</dd>
+                        <small>@PoeData.KindLabel(result.Skill.Kind) 젬</small>
+                    </div>
+                </dl>
+
+                <p class="fate">운명 코드 <code>@result.FateCode</code></p>
+                <p class="hint">같은 닉네임은 언제 뽑아도 같은 결과가 나와요. 마음에 안 들면… 닉네임을 바꾸세요.</p>
+            </section>
+        }
+    }
+
+    <footer class="footer">
+        This is a fan project, not affiliated with Grinding Gear Games.
+    </footer>
+</main>
+
+@code {
+    int? game;
+    string nickname = "";
+    bool phrecia;
+    GachaResult? result;
+
+    void Roll()
+    {
+        if (string.IsNullOrWhiteSpace(nickname)) return;
+        result = BuildGacha.Roll(nickname, phrecia);
+    }
+
+    void Reset()
+    {
+        game = null;
+        result = null;
+    }
+}
