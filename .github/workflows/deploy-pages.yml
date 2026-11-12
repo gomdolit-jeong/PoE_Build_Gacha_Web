@@ -4,6 +4,9 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+  # 추천 스타터 빌드 목록을 새로 받아서 다시 배포합니다 (6시간마다)
+  schedule:
+    - cron: "17 */6 * * *"
 
 permissions:
   contents: read
@@ -23,6 +26,11 @@ jobs:
       - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 9.0.x
+
+      # 실패해도 저장소에 있는 마지막 목록으로 배포는 계속합니다.
+      - name: Crawl starter builds
+        continue-on-error: true
+        run: python3 tools/crawl_starter_builds.py
 
       - name: Publish
         run: dotnet publish PoEBuildGacha.Web/PoEBuildGacha.Web.csproj -c Release -o publish

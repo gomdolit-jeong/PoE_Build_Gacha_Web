@@ -1,0 +1,176 @@
+{
+  "mobalytics": {
+    "source": "https://mobalytics.gg/poe/starter-builds",
+    "builds": [
+      {
+        "name": "[3.30] Poisonous Concoction of Bouncing Pathfinder Leaguestarter",
+        "class": "Ranger",
+        "ascendancy": "Pathfinder",
+        "patch": "3.30 CoU",
+        "author": "animeprincess",
+        "favorites": 41,
+        "updatedAt": "2026-11-12T10:05:40Z",
+        "url": "https://mobalytics.gg/poe/profile/animeprincess/builds/3-30-pconc-of-bouncing-atanimeprincess"
+      },
+      {
+        "name": "Fubgun Winter Orb Elementalist/Occultist",
+        "class": "Witch",
+        "ascendancy": "Elementalist",
+        "patch": "3.30 CoU",
+        "author": "Fubgun",
+        "favorites": 640,
+        "updatedAt": "2026-11-12T00:12:36Z",
+        "url": "https://mobalytics.gg/poe/profile/fubgun/builds/my-new-build"
+      },
+      {
+        "name": "[3.30] Captainlance9's Luminary Merc Bot",
+        "class": "Scion",
+        "ascendancy": "Luminary",
+        "patch": "3.30 CoU",
+        "author": "CaptainLance9",
+        "favorites": 615,
+        "updatedAt": "2026-11-12T15:30:47Z",
+        "url": "https://mobalytics.gg/poe/profile/captainlance/builds/captainlance9-s-luminary-merc-bot"
+      },
+      {
+        "name": "[3.30] Static Strike Juggernaut - Comprehensive Guide - by Ignatius",
+        "class": "Marauder",
+        "ascendancy": "Juggernaut",
+        "patch": "3.30 CoU",
+        "author": "Ignatius",
+        "favorites": 105,
+        "updatedAt": "2026-11-11T18:37:12Z",
+        "url": "https://mobalytics.gg/poe/profile/ignatius/builds/static-strike-juggernaut-by-ignatius"
+      },
+      {
+        "name": "[3.30] Penance Brand Ignite Elementalist Leaguestarter and Endgame @animeprincess",
+        "class": "Witch",
+        "ascendancy": "Elementalist",
+        "patch": "3.30 CoU",
+        "author": "animeprincess",
+        "favorites": 244,
+        "updatedAt": "2026-11-12T16:22:49Z",
+        "url": "https://mobalytics.gg/poe/profile/animeprincess/builds/ignite-elementalist-league-starter-atanimeprincess"
+      },
+      {
+        "name": "Cyclone Shockwave Slayer",
+        "class": "Duelist",
+        "ascendancy": "Slayer",
+        "patch": "3.30 CoU",
+        "author": "Sanavixx",
+        "favorites": 120,
+        "updatedAt": "2026-11-12T15:17:55Z",
+        "url": "https://mobalytics.gg/poe/profile/grim-key-9npusx/builds/None"
+      },
+      {
+        "name": "[3.30] Champion Armour Stacker",
+        "class": "Duelist",
+        "ascendancy": "Champion",
+        "patch": "3.30 CoU",
+        "author": "BigDaddy Gaming",
+        "favorites": 99,
+        "updatedAt": "2026-11-12T07:55:48Z",
+        "url": "https://mobalytics.gg/poe/profile/bigdaddygaming/builds/champion-armour-stacker"
+      },
+      {
+        "name": "[3.30] Shield Crush - Comprehensive Guide - League Start to End Game + Deep Delve",
+        "class": "Marauder",
+        "ascendancy": "Juggernaut",
+        "patch": "3.30 CoU",
+        "author": "Ignatius",
+        "favorites": 315,
+        "updatedAt": "2026-11-11T19:07:15Z",
+        "url": "https://mobalytics.gg/poe/profile/ignatius/builds/shield-crush-everything-league-start-end-game-comprehensive-guide"
+      },
+      {
+        "name": "[3.30] Bigdaddy Scion Leaguestart (How I level my Scion on Leaguestart!)",
+        "class": "Scion",
+        "ascendancy": "Luminary",
+        "patch": "3.30 CoU",
+        "author": "BigDaddy Gaming",
+        "favorites": 280,
+        "updatedAt": "2026-11-12T12:14:07Z",
+        "url": "https://mobalytics.gg/poe/profile/bigdaddygaming/builds/bigdaddies-smite-scion-leagustart"
+      },
+      {
+        "name": "[3.28] Heavy Strike Berserker - OP Stun Build! - SirBonksAlot The Eighth - Final Update May 7th",
+        "class": "Marauder",
+        "ascendancy": "Berserker",
+        "patch": "3.30 CoU",
+        "author": "Inner Blaze",
+        "favorites": 27,
+        "updatedAt": "2026-11-12T12:50:45Z",
+        "url": "https://mobalytics.gg/poe/profile/innerblaze/builds/3-28-heavy-strike-berserker-stun-build"
+      }
+    ]
+  },
+  "updatedAt": "2026-11-12T16:38:10Z",
+  "ninja": {
+    "source": "https://poe.ninja/poe1/builds/allflame",
+    "league": "Allflame",
+    "leagueUrl": "allflame",
+    "characters": 124355,
+    "top": [
+      {
+        "ascendancy": "Chieftain",
+        "skill": "Righteous Fire",
+        "percentage": 4.63,
+        "trend": 1
+      },
+      {
+        "ascendancy": "Occultist",
+        "skill": "Winter Orb",
+        "percentage": 4.62,
+        "trend": 1
+      },
+      {
+        "ascendancy": "Elementalist",
+        "skill": "Winter Orb",
+        "percentage": 2.83,
+        "trend": 1
+      },
+      {
+        "ascendancy": "Elementalist",
+        "skill": "Penance Brand",
+        "percentage": 2.35,
+        "trend": 1
+      },
+      {
+        "ascendancy": "Necromancer",
+        "skill": "Raise Spectre",
+        "percentage": 2.34,
+        "trend": 1
+      },
+      {
+        "ascendancy": "Luminary",
+        "skill": "Animate Guardian",
+        "percentage": 2.3,
+        "trend": -1
+      },
+      {
+        "ascendancy": "Elementalist",
+        "skill": "Ethereal Knives",
+        "percentage": 2.02,
+        "trend": 1
+      },
+      {
+        "ascendancy": "Slayer",
+        "skill": "Cyclone of Tumult",
+        "percentage": 1.87,
+        "trend": 1
+      },
+      {
+        "ascendancy": "Slayer",
+        "skill": "Void Shockwave",
+        "percentage": 1.66,
+        "trend": 1
+      },
+      {
+        "ascendancy": "Chieftain",
+        "skill": "Fire Trap",
+        "percentage": 1.64,
+        "trend": 1
+      }
+    ]
+  }
+}

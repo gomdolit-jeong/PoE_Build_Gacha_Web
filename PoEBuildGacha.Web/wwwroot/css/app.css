@@ -332,3 +332,62 @@ html, body {
     .dice-stage.rolling .dice-bounce, .dice-stage.rolling .dice-shadow,
     .dice-stage.landed, .flash, .result { animation: none; }
 }
+
+/* ===== 추천 스타터 빌드 ===== */
+.starters .muted { color: var(--muted); font-size: .88rem; margin: 0 0 12px; }
+
+.tabs { display: flex; gap: 6px; margin-bottom: 14px; border-bottom: 1px solid var(--line); }
+.tab {
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    color: var(--muted);
+    font: inherit;
+    font-size: .95rem;
+    padding: 8px 10px;
+    margin-bottom: -1px;
+    cursor: pointer;
+}
+.tab:hover { color: var(--text); }
+.tab.active { color: var(--gold); border-bottom-color: var(--gold); font-weight: 700; }
+
+.group-title {
+    margin: 18px 0 8px;
+    font-size: .95rem;
+    color: var(--text);
+    padding-left: 8px;
+    border-left: 3px solid var(--class-color);
+}
+
+.build-list, .rank-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; }
+
+.build, .rank {
+    display: flex;
+    background: #0f0c0a;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    color: var(--text);
+    text-decoration: none;
+    transition: border-color .15s;
+}
+.build:hover, .rank:hover { border-color: var(--gold); }
+
+.build { flex-direction: column; gap: 4px; padding: 10px 12px; }
+.build-name { font-weight: 700; line-height: 1.35; overflow-wrap: anywhere; }
+.build-meta { display: flex; flex-wrap: wrap; gap: 4px 12px; color: var(--muted); font-size: .82rem; }
+.build-meta .asc { color: var(--gold); }
+.build-meta .patch { color: #8fb3d9; }
+
+.rank { align-items: center; gap: 12px; padding: 8px 12px; }
+.rank-no { width: 22px; text-align: center; font-weight: 700; color: var(--gold); }
+.rank-body { flex: 1; display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.rank-title { font-size: .92rem; overflow-wrap: anywhere; }
+.bar { height: 6px; background: #231d17; border-radius: 3px; overflow: hidden; }
+.bar > span { display: block; height: 100%; background: var(--class-color); border-radius: 3px; }
+.pct { font-variant-numeric: tabular-nums; color: var(--muted); font-size: .88rem; }
+.trend { font-size: .7rem; margin-left: 4px; }
+.trend.up { color: #4caf50; }
+.trend.down { color: #e57373; }
+
+.source { margin: 12px 0 0; color: #6f6455; font-size: .78rem; }
+.source a { color: var(--muted); }

@@ -116,6 +116,30 @@ public static class PoeData
 
     public static Skill[] MovementSkills(PoeClass poeClass) => MovementByClass[poeClass.Name];
 
+    // 영문 이름 → 한글 이름 (스타터 빌드 목록에서 씁니다). 모르는 이름은 그대로 둡니다.
+    static readonly Dictionary<string, string> KoreanNames = BuildKoreanNames();
+
+    static Dictionary<string, string> BuildKoreanNames()
+    {
+        var names = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+        foreach (var c in Classes)
+        {
+            names[c.Name] = c.Korean;
+            foreach (var a in c.Ascendancies.Concat(c.PhreciaAscendancies)) names[a.Name] = a.Korean;
+            foreach (var s in c.Skills) names[s.Name] = s.Korean;
+        }
+        foreach (var s in MovementByClass.Values.SelectMany(x => x)) names[s.Name] = s.Korean;
+        return names;
+    }
+
+    public static string? Korean(string? english) =>
+        english is not null && KoreanNames.TryGetValue(english, out var korean) ? korean : null;
+
+    /// <summary>전직 이름으로 직업을 찾습니다 (일반·프레시아 전직 모두).</summary>
+    public static PoeClass? ClassOfAscendancy(string? ascendancy) =>
+        Classes.FirstOrDefault(c => c.Ascendancies.Concat(c.PhreciaAscendancies)
+            .Any(a => string.Equals(a.Name, ascendancy, StringComparison.OrdinalIgnoreCase)));
+
     public static string KindLabel(SkillKind kind) => kind switch
     {
         SkillKind.Attack => "공격",

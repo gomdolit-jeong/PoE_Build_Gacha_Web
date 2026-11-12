@@ -1,0 +1,156 @@
+@using PoEBuildGacha.Web.Gacha
+@inject HttpClient Http
+
+<section class="panel starters">
+    <h2>이번 리그 추천 스타터 빌드</h2>
+
+    @if (data is null)
+    {
+        <p class="muted">@(failed ? "목록을 불러오지 못했어요." : "불러오는 중...")</p>
+    }
+    else
+    {
+        <div class="tabs" role="tablist">
+            <button role="tab" class="tab @(tab == 0 ? "active" : "")" aria-selected="@(tab == 0)" @onclick="() => tab = 0">
+                검증된 스타터 빌드
+            </button>
+            <button role="tab" class="tab @(tab == 1 ? "active" : "")" aria-selected="@(tab == 1)" @onclick="() => tab = 1">
+                많이 하는 빌드 TOP 10
+            </button>
+        </div>
+
+        @if (tab == 0)
+        {
+            var builds = data.Mobalytics?.Builds ?? [];
+            <p class="muted">Mobalytics에서 전문가 검증을 받은 리그 스타터 빌드예요. 직업별로 모았어요.</p>
+
+            @if (builds.Length == 0)
+            {
+                <p class="muted">아직 등록된 빌드가 없어요.</p>
+            }
+
+            @foreach (var group in GroupByClass(builds))
+            {
+                <h3 class="group-title" style="--class-color: @group.Color">@group.Title</h3>
+                <ul class="build-list">
+                    @foreach (var b in group.Builds)
+                    {
+                        <li>
+                            <a class="build" href="@b.Url" target="_blank" rel="noopener">
+                                <span class="build-name">@b.Name</span>
+                                <span class="build-meta">
+                                    <span class="asc">@AscendancyLabel(b.Ascendancy)</span>
+                                    <span>@b.Author</span>
+                                    <span>♥ @b.Favorites.ToString("N0")</span>
+                                    @if (!string.IsNullOrEmpty(b.Patch))
+                                    {
+                                        <span class="patch">@b.Patch</span>
+                                    }
+                                </span>
+                            </a>
+                        </li>
+                    }
+                </ul>
+            }
+
+            <p class="source">출처: <a href="@(data.Mobalytics?.Source ?? "https://mobalytics.gg/poe/starter-builds")" target="_blank" rel="noopener">Mobalytics</a></p>
+        }
+        else
+        {
+            var ninja = data.Ninja;
+            @if (ninja is null || ninja.Top.Length == 0)
+            {
+                <p class="muted">아직 통계가 없어요. 리그가 막 시작되면 조금 뒤에 생겨요.</p>
+            }
+            else
+            {
+                var max = ninja.Top.Max(t => t.Percentage);
+                <p class="muted">
+                    <b>@ninja.League</b> 리그 캐릭터 @ninja.Characters.ToString("N0")명 중 실제로 많이 하는 전직 + 스킬 순위예요.
+                </p>
+                <ol class="rank-list">
+                    @foreach (var (t, i) in ninja.Top.Select((t, i) => (t, i)))
+                    {
+                        var cls = PoeData.ClassOfAscendancy(t.Ascendancy);
+                        <li>
+                            <a class="rank" href="@NinjaLink(ninja, t)" target="_blank" rel="noopener"
+                               style="--class-color: @(cls?.Color ?? "#7f8c8d")">
+                                <span class="rank-no">@(i + 1)</span>
+                                <span class="rank-body">
+                                    <span class="rank-title">
+                                        @AscendancyLabel(t.Ascendancy) · @(PoeData.Korean(t.Skill) ?? t.Skill)
+                                        @if (t.Trend > 0) { <span class="trend up" title="오르는 중">▲</span> }
+                                        else if (t.Trend < 0) { <span class="trend down" title="내리는 중">▼</span> }
+                                    </span>
+                                    <span class="bar"><span style="width: @Width(t.Percentage, max)"></span></span>
+                                </span>
+                                <span class="pct">@t.Percentage.ToString("0.0")%</span>
+                            </a>
+                        </li>
+                    }
+                </ol>
+            }
+
+            <p class="source">출처: <a href="@(ninja?.Source ?? "https://poe.ninja/poe1/builds")" target="_blank" rel="noopener">poe.ninja</a></p>
+        }
+
+        @if (UpdatedText is { } updated)
+        {
+            <p class="source">목록 갱신: @updated</p>
+        }
+    }
+</section>
+
+@code {
+    StarterBuildData? data;
+    bool failed;
+    int tab;
+
+    sealed record ClassGroup(string Title, string Color, MobalyticsBuild[] Builds);
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            // GitHub Pages 캐시 때문에 예전 목록이 보이지 않도록 매번 새로 받습니다.
+            data = await Http.GetFromJsonAsync<StarterBuildData>(
+                $"data/starter-builds.json?t={DateTime.UtcNow.Ticks}",
+                new System.Text.Json.JsonSerializerOptions(System.Text.Json.JsonSerializerDefaults.Web));
+        }
+        catch
+        {
+            failed = true;
+        }
+    }
+
+    static IEnumerable<ClassGroup> GroupByClass(MobalyticsBuild[] builds)
+    {
+        // 직업 순서는 뽑기 목록과 같게, 직업 안에서는 좋아요 많은 순
+        foreach (var c in PoeData.Classes)
+        {
+            var list = builds.Where(b => string.Equals(b.Class, c.Name, StringComparison.OrdinalIgnoreCase)
+                                         || (b.Class is null && PoeData.ClassOfAscendancy(b.Ascendancy) == c))
+                             .OrderByDescending(b => b.Favorites)
+                             .ToArray();
+            if (list.Length > 0) yield return new ClassGroup(c.Korean, c.Color, list);
+        }
+
+        var etc = builds.Where(b => PoeData.Classes.All(c => !string.Equals(b.Class, c.Name, StringComparison.OrdinalIgnoreCase))
+                                    && PoeData.ClassOfAscendancy(b.Ascendancy) is null).ToArray();
+        if (etc.Length > 0) yield return new ClassGroup("기타", "#7f8c8d", etc);
+    }
+
+    static string AscendancyLabel(string? ascendancy) =>
+        ascendancy is null ? "전직 미정" : PoeData.Korean(ascendancy) ?? ascendancy;
+
+    static string NinjaLink(NinjaList ninja, NinjaEntry t) =>
+        $"https://poe.ninja/poe1/builds/{ninja.LeagueUrl}?class={Uri.EscapeDataString(t.Ascendancy)}&skills={Uri.EscapeDataString(t.Skill)}";
+
+    static string Width(double value, double max) =>
+        (max <= 0 ? 0 : value / max * 100).ToString("0.#", System.Globalization.CultureInfo.InvariantCulture) + "%";
+
+    string? UpdatedText =>
+        DateTimeOffset.TryParse(data?.UpdatedAt, out var t)
+            ? t.ToOffset(TimeSpan.FromHours(9)).ToString("yyyy-MM-dd HH:mm") + " (한국 시간)"
+            : null;
+}
