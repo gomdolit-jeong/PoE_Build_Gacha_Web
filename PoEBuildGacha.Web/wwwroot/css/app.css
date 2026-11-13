@@ -402,3 +402,27 @@ html, body {
     font-weight: 400;
     vertical-align: middle;
 }
+
+/* ===== 뽑은 빌드 가이드 ===== */
+.guides { margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--line); }
+.guides h3 { margin: 0 0 10px; font-size: 1rem; color: var(--gold); }
+.guides .muted { color: var(--muted); font-size: .85rem; margin: 0 0 10px; }
+.guides .build-list { margin-bottom: 10px; }
+
+.guide-links { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+@media (max-width: 420px) { .guide-links { grid-template-columns: 1fr; } }
+.guide-link {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 10px 12px;
+    background: #0f0c0a;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    color: var(--text);
+    text-decoration: none;
+    transition: border-color .15s;
+}
+.guide-link:hover { border-color: var(--gold); }
+.guide-link b { font-size: .92rem; }
+.guide-link span { color: var(--muted); font-size: .8rem; }

@@ -1,0 +1,83 @@
+@using PoEBuildGacha.Web.Gacha
+@inject StarterBuildStore Store
+
+<div class="guides">
+    <h3>이 빌드 가이드 찾기</h3>
+
+    @if (sameSkill.Length + sameAscendancy.Length > 0)
+    {
+        <ul class="build-list">
+            @foreach (var b in sameSkill.Concat(sameAscendancy).Take(3))
+            {
+                <li>
+                    <a class="build" href="@b.Url" target="_blank" rel="noopener">
+                        <span class="build-name">@b.Name</span>
+                        <span class="build-meta">
+                            <span class="asc">@(sameSkill.Contains(b) ? "같은 스킬" : "같은 전직")</span>
+                            <span>@(PoeData.Korean(b.Ascendancy) ?? b.Ascendancy)</span>
+                            <span>@b.Author</span>
+                            <span>♥ @b.Favorites.ToString("N0")</span>
+                        </span>
+                    </a>
+                </li>
+            }
+        </ul>
+    }
+    else if (loaded)
+    {
+        <p class="muted">추천 스타터 빌드 중에는 딱 맞는 가이드가 없어요. 아래에서 찾아보세요.</p>
+    }
+
+    <div class="guide-links">
+        <a class="guide-link" href="@NinjaUrl" target="_blank" rel="noopener">
+            <b>poe.ninja</b>
+            <span>@(Result.Phrecia ? "이 스킬을 쓰는 실제 캐릭터 보기" : "이 전직 + 스킬로 하는 실제 캐릭터 보기")</span>
+        </a>
+        <a class="guide-link" href="@YouTubeUrl" target="_blank" rel="noopener">
+            <b>YouTube</b>
+            <span>빌드 가이드 영상 검색</span>
+        </a>
+    </div>
+</div>
+
+@code {
+    [Parameter, EditorRequired] public GachaResult Result { get; set; } = default!;
+
+    StarterBuildData? data;
+    bool loaded;
+    MobalyticsBuild[] sameSkill = [];
+    MobalyticsBuild[] sameAscendancy = [];
+
+    protected override async Task OnParametersSetAsync()
+    {
+        data = await Store.GetAsync();
+        loaded = true;
+        (sameSkill, sameAscendancy) = StarterBuildStore.Match(data, Result);
+    }
+
+    string Season => data?.Season?.Version ?? "";
+
+    // 프레시아 전직은 일반 리그 통계에 없으므로 스킬로만 찾습니다.
+    string NinjaUrl
+    {
+        get
+        {
+            var league = data?.Ninja?.LeagueUrl;
+            var baseUrl = league is null ? "https://poe.ninja/poe1/builds" : $"https://poe.ninja/poe1/builds/{league}";
+            var skill = Uri.EscapeDataString(Result.Skill.Name);
+            return Result.Phrecia
+                ? $"{baseUrl}?skills={skill}"
+                : $"{baseUrl}?class={Uri.EscapeDataString(Result.Ascendancy.Name)}&skills={skill}";
+        }
+    }
+
+    string YouTubeUrl
+    {
+        get
+        {
+            var query = $"PoE {Season} {Result.Skill.Name} {Result.Ascendancy.Name} build guide";
+            if (Result.Phrecia) query += " Phrecia";
+            return "https://www.youtube.com/results?search_query=" + Uri.EscapeDataString(query.Replace("  ", " ").Trim());
+        }
+    }
+}

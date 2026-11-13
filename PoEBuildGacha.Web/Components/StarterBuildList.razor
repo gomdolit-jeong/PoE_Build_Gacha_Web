@@ -1,5 +1,5 @@
 @using PoEBuildGacha.Web.Gacha
-@inject HttpClient Http
+@inject StarterBuildStore Store
 
 <section class="panel starters">
     <h2>
@@ -125,17 +125,8 @@
 
     protected override async Task OnInitializedAsync()
     {
-        try
-        {
-            // GitHub Pages 캐시 때문에 예전 목록이 보이지 않도록 매번 새로 받습니다.
-            data = await Http.GetFromJsonAsync<StarterBuildData>(
-                $"data/starter-builds.json?t={DateTime.UtcNow.Ticks}",
-                new System.Text.Json.JsonSerializerOptions(System.Text.Json.JsonSerializerDefaults.Web));
-        }
-        catch
-        {
-            failed = true;
-        }
+        data = await Store.GetAsync();
+        failed = data is null;
     }
 
     static IEnumerable<ClassGroup> GroupByClass(MobalyticsBuild[] builds)
