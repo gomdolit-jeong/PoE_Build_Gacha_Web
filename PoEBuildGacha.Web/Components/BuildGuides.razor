@@ -55,8 +55,6 @@
         (sameSkill, sameAscendancy) = StarterBuildStore.Match(data, Result);
     }
 
-    string Season => data?.Season?.Version ?? "";
-
     // 프레시아 전직은 일반 리그 통계에 없으므로 스킬로만 찾습니다.
     string NinjaUrl
     {
@@ -75,9 +73,10 @@
     {
         get
         {
-            var query = $"PoE {Season} {Result.Skill.Name} {Result.Ascendancy.Name} build guide";
+            // 시즌 번호나 "build guide"를 붙이면 검색 결과가 너무 적어서 빼고 찾습니다.
+            var query = $"PoE {Result.Skill.Name} {Result.Ascendancy.Name}";
             if (Result.Phrecia) query += " Phrecia";
-            return "https://www.youtube.com/results?search_query=" + Uri.EscapeDataString(query.Replace("  ", " ").Trim());
+            return "https://www.youtube.com/results?search_query=" + Uri.EscapeDataString(query);
         }
     }
 }
