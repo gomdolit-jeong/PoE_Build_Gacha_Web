@@ -140,13 +140,28 @@ def crawl_mobalytics(limit: int = 40) -> dict:
     return {"source": MOBALYTICS_PAGE, "builds": builds[:limit]}
 
 
-def crawl_ninja() -> dict:
+def is_season_league(league_name: str, season_name: str | None) -> bool:
+    """poe.ninja 리그 이름(예: Allflame)의 단어가 이번 리그 이름(예: Curse of the Allflame)에 들어 있는지"""
+    if not season_name:
+        return False
+    words = [w for w in re.split(r"\W+", league_name) if len(w) > 2]
+    return any(w.lower() in season_name.lower() for w in words)
+
+
+def crawl_ninja(season_name: str | None = None) -> dict:
     leagues = get_json(NINJA_INDEX)["leagueBuilds"]
-    # 진행 중인 챌린지 리그 (소프트코어) 중 캐릭터가 가장 많은 리그 = 일반 트레이드 리그
-    current = [l for l in leagues if l.get("category") == 0 and l.get("status") == 1 and not l.get("hardcore")]
-    if not current:
-        raise RuntimeError("진행 중인 리그를 찾지 못했습니다")
-    league = max(current, key=lambda l: l.get("total", 0))
+    # 챌린지 리그(소프트코어)만 봅니다. 같은 리그의 SSF·Ruthless보다 일반 트레이드 리그가 캐릭터가 가장 많습니다.
+    challenge = [l for l in leagues if l.get("category") == 0 and not l.get("hardcore") and l.get("statistics")]
+
+    # 1) 이번 리그 통계가 생겼으면 그것을 씁니다. 새 리그 초반에는 지난 리그가 아직 '진행 중'으로 남아 있고
+    #    캐릭터 수도 더 많아서, 이름으로 먼저 찾아야 이번 리그로 넘어갑니다.
+    # 2) 아직 없으면 진행 중인 리그 중 가장 큰 리그(보통 지난 리그)를 씁니다.
+    season = [l for l in challenge if is_season_league(l["leagueName"], season_name)]
+    current = [l for l in challenge if l.get("status") == 1]
+    candidates = season or current
+    if not candidates:
+        raise RuntimeError("통계가 있는 리그를 찾지 못했습니다")
+    league = max(candidates, key=lambda l: l.get("total", 0))
     return {
         "source": f"https://poe.ninja/poe1/builds/{league['leagueUrl']}",
         "league": league["leagueName"],
@@ -170,7 +185,12 @@ def main() -> int:
     data = dict(previous)
     ok = 0
 
-    for key, crawl in (("season", crawl_season), ("mobalytics", crawl_mobalytics), ("ninja", crawl_ninja)):
+    crawlers = (
+        ("season", crawl_season),
+        ("mobalytics", crawl_mobalytics),
+        ("ninja", lambda: crawl_ninja((data.get("season") or {}).get("name"))),
+    )
+    for key, crawl in crawlers:
         try:
             data[key] = crawl()
             ok += 1
