@@ -12,7 +12,9 @@ Maxroll은 robots.txt에서 자동 수집을 금지하므로 쓰지 않습니다
 
 from __future__ import annotations
 
+import html
 import json
+import re
 import sys
 import time
 import urllib.error
@@ -41,6 +43,10 @@ MOBALYTICS_QUERY = """query PoeStFilterDocumentContentQuery($input: PoeStructDoc
 
 NINJA_INDEX = "https://poe.ninja/poe1/api/data/build-index-state"
 
+# 공식 패치 노트 게시판 (robots.txt에서 허용된 경로). 가장 최근 "Content Update 3.xx.0" 글 제목에서 리그 이름을 읽습니다.
+PATCH_NOTES_FORUM = "https://www.pathofexile.com/forum/view-forum/patch-notes"
+SEASON_TITLE = re.compile(r"Content Update (\d+\.\d+)\.0\s*(?:—|--|-)\s*Path of Exile:\s*([^<\n]+?)\s*<")
+
 
 def fetch_json(req: urllib.request.Request, tries: int = 3) -> dict:
     # 일시적인 네트워크 오류는 잠깐 쉬었다가 다시 시도합니다.
@@ -65,6 +71,20 @@ def post_json(url: str, body: dict) -> dict:
 
 def get_json(url: str) -> dict:
     return fetch_json(urllib.request.Request(url, headers={"user-agent": USER_AGENT}))
+
+
+def get_text(url: str) -> str:
+    req = urllib.request.Request(url, headers={"user-agent": USER_AGENT})
+    with urllib.request.urlopen(req, timeout=30) as res:
+        return res.read().decode("utf-8", errors="replace")
+
+
+def crawl_season() -> dict:
+    page = get_text(PATCH_NOTES_FORUM)
+    m = SEASON_TITLE.search(page)
+    if not m:
+        raise RuntimeError("패치 노트 게시판에서 리그 이름을 찾지 못했습니다")
+    return {"version": m.group(1), "name": html.unescape(m.group(2)).strip(), "source": PATCH_NOTES_FORUM}
 
 
 def mobalytics_page(widget_id: str | None, cursor: str | None) -> list[dict]:
@@ -150,7 +170,7 @@ def main() -> int:
     data = dict(previous)
     ok = 0
 
-    for key, crawl in (("mobalytics", crawl_mobalytics), ("ninja", crawl_ninja)):
+    for key, crawl in (("season", crawl_season), ("mobalytics", crawl_mobalytics), ("ninja", crawl_ninja)):
         try:
             data[key] = crawl()
             ok += 1

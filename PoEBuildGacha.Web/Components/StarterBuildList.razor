@@ -2,7 +2,13 @@
 @inject HttpClient Http
 
 <section class="panel starters">
-    <h2>이번 리그 추천 스타터 빌드</h2>
+    <h2>
+        이번 리그 추천 스타터 빌드
+        @if (data?.Season is { } season)
+        {
+            <span class="season">@season</span>
+        }
+    </h2>
 
     @if (data is null)
     {
@@ -22,7 +28,7 @@
         @if (tab == 0)
         {
             var builds = data.Mobalytics?.Builds ?? [];
-            <p class="muted">Mobalytics에서 전문가 검증을 받은 리그 스타터 빌드예요. 직업별로 모았어요.</p>
+            <p class="muted">이번 리그(@SeasonText)에 맞춰 Mobalytics에서 전문가 검증을 받은 스타터 빌드예요. 직업별로 모았어요.</p>
 
             @if (builds.Length == 0)
             {
@@ -65,9 +71,18 @@
             else
             {
                 var max = ninja.Top.Max(t => t.Percentage);
-                <p class="muted">
-                    <b>@ninja.League</b> 리그 캐릭터 @ninja.Characters.ToString("N0")명 중 실제로 많이 하는 전직 + 스킬 순위예요.
-                </p>
+                @if (IsCurrentLeague(ninja))
+                {
+                    <p class="muted">
+                        이번 리그(@SeasonText) 캐릭터 @ninja.Characters.ToString("N0")명 중 실제로 많이 하는 전직 + 스킬 순위예요.
+                    </p>
+                }
+                else
+                {
+                    <p class="muted">
+                        이번 리그(@SeasonText) 통계가 아직 없어서, 지난 리그(@ninja.League) 캐릭터 @ninja.Characters.ToString("N0")명의 순위를 보여 드려요.
+                    </p>
+                }
                 <ol class="rank-list">
                     @foreach (var (t, i) in ninja.Top.Select((t, i) => (t, i)))
                     {
@@ -139,6 +154,14 @@
                                     && PoeData.ClassOfAscendancy(b.Ascendancy) is null).ToArray();
         if (etc.Length > 0) yield return new ClassGroup("기타", "#7f8c8d", etc);
     }
+
+    string SeasonText => data?.Season?.ToString() ?? "현재 시즌";
+
+    /// <summary>poe.ninja 리그 이름(예: Allflame)이 이번 리그 이름(예: Curse of the Allflame)에 들어 있으면 이번 리그로 봅니다.</summary>
+    bool IsCurrentLeague(NinjaList ninja) =>
+        data?.Season is not { } season
+        || ninja.League.Split(' ', StringSplitOptions.RemoveEmptyEntries)
+               .Any(word => word.Length > 2 && season.Name.Contains(word, StringComparison.OrdinalIgnoreCase));
 
     static string AscendancyLabel(string? ascendancy) =>
         ascendancy is null ? "전직 미정" : PoeData.Korean(ascendancy) ?? ascendancy;

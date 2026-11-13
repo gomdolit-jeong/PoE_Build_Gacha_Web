@@ -8,9 +8,19 @@
         "ascendancy": "Pathfinder",
         "patch": "3.30 CoU",
         "author": "animeprincess",
-        "favorites": 41,
+        "favorites": 55,
         "updatedAt": "2026-11-12T10:05:40Z",
         "url": "https://mobalytics.gg/poe/profile/animeprincess/builds/3-30-pconc-of-bouncing-atanimeprincess"
+      },
+      {
+        "name": "Ky's Blade Fall + Blade Blast Slinger / CoC Assassin Leaguestart to Endgame",
+        "class": "Shadow",
+        "ascendancy": "Assassin",
+        "patch": "3.30 CoU",
+        "author": "Ky",
+        "favorites": 602,
+        "updatedAt": "2026-11-13T01:25:50Z",
+        "url": "https://mobalytics.gg/poe/profile/pathofky/builds/ky-s-blade-fall-blade-blast-slinger-coc-assassin-leaguestart-to-endgame"
       },
       {
         "name": "Fubgun Winter Orb Elementalist/Occultist",
@@ -18,7 +28,7 @@
         "ascendancy": "Elementalist",
         "patch": "3.30 CoU",
         "author": "Fubgun",
-        "favorites": 640,
+        "favorites": 642,
         "updatedAt": "2026-11-12T00:12:36Z",
         "url": "https://mobalytics.gg/poe/profile/fubgun/builds/my-new-build"
       },
@@ -28,7 +38,7 @@
         "ascendancy": "Luminary",
         "patch": "3.30 CoU",
         "author": "CaptainLance9",
-        "favorites": 615,
+        "favorites": 620,
         "updatedAt": "2026-11-12T15:30:47Z",
         "url": "https://mobalytics.gg/poe/profile/captainlance/builds/captainlance9-s-luminary-merc-bot"
       },
@@ -38,7 +48,7 @@
         "ascendancy": "Juggernaut",
         "patch": "3.30 CoU",
         "author": "Ignatius",
-        "favorites": 105,
+        "favorites": 111,
         "updatedAt": "2026-11-11T18:37:12Z",
         "url": "https://mobalytics.gg/poe/profile/ignatius/builds/static-strike-juggernaut-by-ignatius"
       },
@@ -48,8 +58,8 @@
         "ascendancy": "Elementalist",
         "patch": "3.30 CoU",
         "author": "animeprincess",
-        "favorites": 244,
-        "updatedAt": "2026-11-12T16:22:49Z",
+        "favorites": 253,
+        "updatedAt": "2026-11-12T16:57:11Z",
         "url": "https://mobalytics.gg/poe/profile/animeprincess/builds/ignite-elementalist-league-starter-atanimeprincess"
       },
       {
@@ -58,7 +68,7 @@
         "ascendancy": "Slayer",
         "patch": "3.30 CoU",
         "author": "Sanavixx",
-        "favorites": 120,
+        "favorites": 142,
         "updatedAt": "2026-11-12T15:17:55Z",
         "url": "https://mobalytics.gg/poe/profile/grim-key-9npusx/builds/None"
       },
@@ -68,7 +78,7 @@
         "ascendancy": "Champion",
         "patch": "3.30 CoU",
         "author": "BigDaddy Gaming",
-        "favorites": 99,
+        "favorites": 103,
         "updatedAt": "2026-11-12T07:55:48Z",
         "url": "https://mobalytics.gg/poe/profile/bigdaddygaming/builds/champion-armour-stacker"
       },
@@ -78,7 +88,7 @@
         "ascendancy": "Juggernaut",
         "patch": "3.30 CoU",
         "author": "Ignatius",
-        "favorites": 315,
+        "favorites": 317,
         "updatedAt": "2026-11-11T19:07:15Z",
         "url": "https://mobalytics.gg/poe/profile/ignatius/builds/shield-crush-everything-league-start-end-game-comprehensive-guide"
       },
@@ -104,7 +114,7 @@
       }
     ]
   },
-  "updatedAt": "2026-11-12T16:38:10Z",
+  "updatedAt": "2026-11-13T02:18:35Z",
   "ninja": {
     "source": "https://poe.ninja/poe1/builds/allflame",
     "league": "Allflame",
@@ -172,5 +182,10 @@
         "trend": 1
       }
     ]
+  },
+  "season": {
+    "version": "3.30",
+    "name": "Covens of Umbra",
+    "source": "https://www.pathofexile.com/forum/view-forum/patch-notes"
   }
 }

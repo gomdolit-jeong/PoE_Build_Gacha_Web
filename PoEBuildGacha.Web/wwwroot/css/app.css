@@ -391,3 +391,14 @@ html, body {
 
 .source { margin: 12px 0 0; color: #6f6455; font-size: .78rem; }
 .source a { color: var(--muted); }
+.starters h2 .season {
+    display: inline-block;
+    margin-left: 6px;
+    padding: 2px 10px;
+    border-radius: 999px;
+    background: #3b3127;
+    color: var(--gold);
+    font-size: .8rem;
+    font-weight: 400;
+    vertical-align: middle;
+}

@@ -4,8 +4,15 @@ namespace PoEBuildGacha.Web.Gacha;
 
 public sealed record StarterBuildData(
     string? UpdatedAt,
+    Season? Season,
     MobalyticsList? Mobalytics,
     NinjaList? Ninja);
+
+/// <summary>공식 패치 노트에서 읽은 이번 리그 (예: 3.30 Covens of Umbra)</summary>
+public sealed record Season(string Version, string Name)
+{
+    public override string ToString() => $"{Version} {Name}";
+}
 
 public sealed record MobalyticsList(string Source, MobalyticsBuild[] Builds);
 
