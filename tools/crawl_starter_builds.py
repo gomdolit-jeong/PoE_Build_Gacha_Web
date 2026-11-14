@@ -3,6 +3,9 @@
 출처 (둘 다 robots.txt에서 허용된 경로만 씁니다)
 - Mobalytics: 검증된(Verified) 스타터 빌드 목록 (https://mobalytics.gg/poe/starter-builds)
 - poe.ninja: 현재 리그에서 실제로 많이 하는 전직 + 스킬 순위
+- poedb (https://poedb.tw/kr/): 순위에 나온 스킬·전직의 한국어 이름
+
+공식 사이트의 /api/ 경로는 robots.txt에서 자동 수집을 금지하므로 쓰지 않습니다.
 
 Maxroll은 robots.txt에서 자동 수집을 금지하므로 쓰지 않습니다.
 
@@ -18,6 +21,7 @@ import re
 import sys
 import time
 import urllib.error
+import urllib.parse
 import urllib.request
 from datetime import datetime, timezone
 from pathlib import Path
@@ -45,6 +49,9 @@ NINJA_INDEX = "https://poe.ninja/poe1/api/data/build-index-state"
 
 # 공식 패치 노트 게시판 (robots.txt에서 허용된 경로). 가장 최근 "Content Update 3.xx.0" 글 제목에서 리그 이름을 읽습니다.
 PATCH_NOTES_FORUM = "https://www.pathofexile.com/forum/view-forum/patch-notes"
+POEDB_KR = "https://poedb.tw/kr/"
+OG_TITLE = re.compile(r'<meta[^>]+property="og:title"[^>]+content="([^"]+)"')
+
 SEASON_TITLE = re.compile(r"Content Update (\d+\.\d+)\.0\s*(?:—|--|-)\s*Path of Exile:\s*([^<\n]+?)\s*<")
 
 
@@ -179,6 +186,29 @@ def crawl_ninja(season_name: str | None = None) -> dict:
     }
 
 
+def crawl_korean_names(data: dict, known: dict) -> dict:
+    """순위에 나온 스킬·전직의 한국어 이름을 poedb에서 찾습니다. 이미 아는 이름은 다시 받지 않습니다."""
+    names = dict(known)
+    wanted = set()
+    for t in (data.get("ninja") or {}).get("top", []):
+        wanted.update(n for n in (t.get("skill"), t.get("ascendancy")) if n)
+    for b in (data.get("mobalytics") or {}).get("builds", []):
+        if b.get("ascendancy"):
+            wanted.add(b["ascendancy"])
+    for name in sorted(wanted - names.keys()):
+        try:
+            page = get_text(POEDB_KR + urllib.parse.quote(name.replace(" ", "_")))
+            m = OG_TITLE.search(page)
+            korean = html.unescape(m.group(1)).strip() if m else ""
+            # 한글이 없으면 (번역 없음·없는 페이지) 저장하지 않습니다.
+            if re.search(r"[가-힣]", korean):
+                names[name] = korean
+            time.sleep(0.5)
+        except Exception as e:
+            print(f"  한국어 이름 못 찾음: {name} - {e}")
+    return names
+
+
 def main() -> int:
     out = Path(sys.argv[1]) if len(sys.argv) > 1 else DEFAULT_OUT
     previous = json.loads(out.read_text(encoding="utf-8")) if out.exists() else {}
@@ -197,6 +227,12 @@ def main() -> int:
             print(f"{key}: OK")
         except Exception as e:  # 한쪽이 실패해도 다른 쪽은 갱신합니다.
             print(f"{key}: 실패 - {e} (기존 데이터 유지)")
+
+    try:
+        data["koreanNames"] = crawl_korean_names(data, previous.get("koreanNames") or {})
+        print(f"koreanNames: {len(data['koreanNames'])}개")
+    except Exception as e:
+        print(f"koreanNames: 실패 - {e}")
 
     if ok == 0:
         print("모든 출처가 실패해서 파일을 바꾸지 않습니다.")

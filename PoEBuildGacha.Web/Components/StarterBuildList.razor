@@ -93,7 +93,7 @@
                                 <span class="rank-no">@(i + 1)</span>
                                 <span class="rank-body">
                                     <span class="rank-title">
-                                        @AscendancyLabel(t.Ascendancy) · @(PoeData.Korean(t.Skill) ?? t.Skill)
+                                        @AscendancyLabel(t.Ascendancy) · @(data.Korean(t.Skill) ?? t.Skill)
                                         @if (t.Trend > 0) { <span class="trend up" title="오르는 중">▲</span> }
                                         else if (t.Trend < 0) { <span class="trend down" title="내리는 중">▼</span> }
                                     </span>
@@ -154,8 +154,8 @@
         || ninja.League.Split(' ', StringSplitOptions.RemoveEmptyEntries)
                .Any(word => word.Length > 2 && season.Name.Contains(word, StringComparison.OrdinalIgnoreCase));
 
-    static string AscendancyLabel(string? ascendancy) =>
-        ascendancy is null ? "전직 미정" : PoeData.Korean(ascendancy) ?? ascendancy;
+    string AscendancyLabel(string? ascendancy) =>
+        ascendancy is null ? "전직 미정" : data?.Korean(ascendancy) ?? ascendancy;
 
     static string NinjaLink(NinjaList ninja, NinjaEntry t) =>
         $"https://poe.ninja/poe1/builds/{ninja.LeagueUrl}?class={Uri.EscapeDataString(t.Ascendancy)}&skills={Uri.EscapeDataString(t.Skill)}";
